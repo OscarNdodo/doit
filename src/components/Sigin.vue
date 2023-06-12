@@ -32,7 +32,6 @@
 </template>
 
 <script>
-import axios from "axios";
 export default {
   name: "Sig-in",
   data() {
@@ -49,29 +48,7 @@ export default {
         password: this.password,
       };
 
-      axios
-        .post("http://localhost:1516/login/", data)
-        .then((response) => response.data.user[0])
-        .then((user) => {
-          console.log(user);
-          if (this.email === user.email && this.password === user.password) {
-            setTimeout(() => {
-              this.$emit("logado", user.name);
-            }, 1000);
-          } else {
-            this.error = "error";
-            setTimeout(() => {
-              this.error = "";
-            }, 2000);
-          }
-        })
-        .catch((error) => {
-          this.error = "error";
-          setTimeout(() => {
-            this.error = "";
-          }, 2000);
-          console.log(error);
-        });
+      this.$emit("login", data);
     },
     createAccount() {
       this.$emit("createAccount");

@@ -1,7 +1,8 @@
 <template>
   <div>
     <NavBar @logOut="showLogin" v-if="logado" :user="user" />
-    <sigin-vue
+    <SiginVue
+      @login="login"
       @logado="hideLogin"
       @createAccount="create"
       v-else
@@ -25,10 +26,9 @@ import ListVue from "./components/List.vue";
 import NavBar from "./components/NavBar.vue";
 import SiginVue from "./components/Sigin.vue";
 import Account from "./components/Account.vue";
-
+import api from "./config/api";
 
 export default {
-
   name: "App",
   components: {
     NavBar,
@@ -41,21 +41,20 @@ export default {
     return {
       logado: false,
       haveAccount: true,
-      textTask: "",
+      textTask: [],
       user: "",
+      userId: ""
     };
   },
   methods: {
-    hideLogin($event) {
+    hideLogin() {
       this.logado = true;
-      this.user = $event;
     },
     showLogin() {
       this.logado = false;
     },
     addNewTask($evt) {
-      this.textTask = $evt;
-
+      this.store(this.textTask = $evt, this.userId);
     },
     create() {
       this.haveAccount = false;
@@ -66,6 +65,56 @@ export default {
         ? (this.haveAccount = true)
         : (this.haveAccount = false);
     },
+    login($event) {
+      this.api($event);
+    },
+    //Query
+    api(values) {
+      // User
+      api
+        .post("/login", values)
+        .then((response) => response.data.user)
+        .then((data) => {
+
+            this.userId = data[0].id;
+            //Tasks
+            this.tasks(data[0].id);
+
+            this.user = data.name;
+          if ( values.email === data.email && values.password === data.password ) {
+
+            this.logado = false;
+
+          } else {
+            this.logado = true;
+          }
+        })
+        .catch((error) => console.log(error));
+    },
+    tasks(id) {
+      api.get(`/user/${id}/tasks`)
+      
+        .then((response) => response.data.user.tasks)
+        .then((tasks) => {
+            tasks.map((value) => {
+                setTimeout(() =>{
+                    this.textTask = value.title
+                },100)
+            })
+        })
+        .catch((error) => console.log("Tasks error: " + error));
+    },
+    store(value, userId){
+        const user_id = userId
+        const data = {
+            title: value,
+            content: "Yet empty",
+        }
+        api.post(`/user/${user_id}/tasks`, data)
+        // .then((response) => console.log(response))
+        .catch((error) => console.log(error))
+
+    }
   },
 };
 </script>

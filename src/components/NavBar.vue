@@ -1,6 +1,6 @@
 <template>
   <div class="navbar">
-    <h1>ToDo-List</h1>
+    <h1>{{ user }}</h1>
     <ul>
       <h2>{{ user }}</h2>
       <a href="#" @click="logOut">Logout</a>

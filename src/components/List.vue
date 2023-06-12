@@ -23,19 +23,18 @@ export default {
     };
   },
   watch: {
-    text(){
-      this.loading()
-    }
-  }
-  ,
+    text() {
+      this.loading();
+    },
+  },
   methods: {
-    loading(){
-       if (this.text != "") {
+    loading() {
+      if (this.text != "") {
         this.tasks.push(this.text);
       }
     },
     taskDone($event) {
-      $event.target.parentElement.classList.toggle("done")
+      $event.target.parentElement.classList.toggle("done");
     },
     closeTask($event) {
       $event.target.parentElement.remove();

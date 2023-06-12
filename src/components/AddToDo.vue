@@ -15,9 +15,8 @@ export default {
     },
     methods: {
         addTask(){
-            this.$emit("addTask", this.text)
-            this.text = ""
-
+            this.$emit("addTask", this.text);
+            this.text = "";
         }
     }
 }
