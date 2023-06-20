@@ -1,47 +1,49 @@
 <template>
-  <div class="login">
-    <h2>Account</h2>
-    <p @click="backLogin" :class="status">{{ statusText }}</p>
-    <form @submit.prevent="create">
-      <label for="name">Name</label>
-      <input
-        type="text"
-        name="name"
-        id="name"
-        v-model="name"
-        placeholder="Type your full name"
-        required
-        aria-autocomplete="none"
-        autocomplete="none"
-      />
-      <label for="emailAccount">Email</label>
-      <input
-        type="email"
-        name="emailAccount"
-        id="emailAccount"
-        v-model="emailAccount"
-        placeholder="Type your e-mail"
-        required
-        aria-autocomplete="none"
-        autocomplete="none"
-      />
-      <label for="passwordAccount">Password</label>
-      <input
-        type="password"
-        name="passwordAccount"
-        id="passwordAccount"
-        v-model="passwordAccount"
-        placeholder="Type your password"
-        aria-autocomplete="none"
-        autocomplete="none"
-      />
-      <button type="submit">Create</button>
-    </form>
+  <div class="main">
+    <div class="login">
+      <h2>Account</h2>
+      <p @click="backLogin" :class="status">{{ statusText }}</p>
+      <form @submit.prevent="create">
+        <label for="name">Name</label>
+        <input
+          type="text"
+          name="name"
+          id="name"
+          v-model="name"
+          placeholder="Type your full name"
+          required
+          aria-autocomplete="none"
+          autocomplete="none"
+        />
+        <label for="emailAccount">Email</label>
+        <input
+          type="email"
+          name="emailAccount"
+          id="emailAccount"
+          v-model="emailAccount"
+          placeholder="Type your e-mail"
+          required
+          aria-autocomplete="none"
+          autocomplete="none"
+        />
+        <label for="passwordAccount">Password</label>
+        <input
+          type="password"
+          name="passwordAccount"
+          id="passwordAccount"
+          v-model="passwordAccount"
+          placeholder="Type your password"
+          aria-autocomplete="none"
+          autocomplete="none"
+        />
+        <button type="submit">Create</button>
+      </form>
+    </div>
   </div>
 </template>
 
 <script>
-import axios from "axios";
+
 export default {
   name: "A-ccount",
   data() {
@@ -57,53 +59,26 @@ export default {
     backLogin() {
       this.$emit("backLogin", "logado");
     },
-    create() {
+    /*create() {
       const data = {
         name: this.name,
         email: this.emailAccount,
         password: this.passwordAccount,
       };
-
-      axios
-        .post("http://localhost:1516/account/create", data)
-        .then((response) => response.status)
-        .then((status) => {
-          if (status === 200) {
-            setTimeout(() => {
-              this.statusText = "Account created!";
-              this.status = "status";
-            }, 3000);
-            this.backLogin();
-            this.statusText = "I already have a account";
-            this.status = "";
-          } else {
-            setTimeout(() => {
-              this.statusText = "I already have a account";
-              this.status = "";
-            }, 3000);
-            this.statusText = "Error: User already exists!";
-            this.status = "error";
-          }
-        })
-        .catch((error) => {
-          setTimeout(() => {
-            this.statusText = "I already have a account";
-            this.status = "";
-          }, 3000);
-          this.statusText = "Error: User already exists!";
-          this.status = "error";
-          console.log(error);
-        });
-    },
+    },*/
   },
 };
 </script>
 
 <style scoped>
+.main {
+  width: 100%;
+  height: 90vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 .login {
-  position: fixed;
-  left: 40%;
-  top: 120px;
   width: 300px;
   display: flex;
   flex-direction: column;
@@ -136,6 +111,7 @@ p {
   cursor: pointer;
   color: white;
   text-decoration: underline;
+  margin: 10px 0;
 }
 .status {
   color: #00c073;
@@ -157,7 +133,7 @@ p {
   color: #eeeeee;
 }
 .login form input {
-  width: 95%;
+  width: 100%;
   font-size: 18px;
   outline: none;
   padding: 10px 6px;

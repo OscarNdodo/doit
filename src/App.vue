@@ -1,148 +1,103 @@
 <template>
-  <div>
-    <NavBar @logOut="showLogin" v-if="logado" :user="user" />
-    <SiginVue
-      @login="login"
-      @logado="hideLogin"
-      @createAccount="create"
-      v-else
-      v-show="haveAccount"
-    />
-    <Account v-show="!haveAccount" @backLogin="backLogin" />
-    <div v-if="logado" class="container">
-      <form>
-        <AddToDoVue @addTask="addNewTask" />
-      </form>
-      <div class="list">
-        <ListVue :text="textTask" />
-      </div>
+  <main>
+    <div class="account" v-show="goLogin">
+      <AccountVue @backLogin="backLogin" v-if="account" />
+      <SiginVue @createAccount="createAccount" v-else />
     </div>
-  </div>
+    <div class="home" v-if="statusLogin === 'logged'">
+      <HeaderVue
+        @openMenu="openMenu"
+        @getLogin="getLogin"
+        :iconMenu="iconMenu"
+      />
+      <MenuVue
+        v-if="showMenu"
+        @addNewTask="addNewTask"
+        @showDoneTask="showDoneTask"
+        @showPendentTask="showPendentTask"
+        @showWarningTask="showWarningTask"
+        @showUsers="showUsers"
+      />
+      <DashVue :typeTask="typeTask" :content="content" />
+    </div>
+    <GetStartedVue @getLogin="getLogin" v-show="!goLogin" v-else />
+  </main>
 </template>
 
 <script>
-import AddToDoVue from "./components/AddToDo.vue";
-import ListVue from "./components/List.vue";
-import NavBar from "./components/NavBar.vue";
+import HeaderVue from "./components/Header.vue";
+import MenuVue from "./components/Menu.vue";
+import GetStartedVue from "./components/GetStarted.vue";
 import SiginVue from "./components/Sigin.vue";
-import Account from "./components/Account.vue";
-import api from "./config/api";
+import AccountVue from "./components/Account.vue";
+import DashVue from "./components/Dash.vue";
 
 export default {
   name: "App",
   components: {
-    NavBar,
+    HeaderVue,
+    MenuVue,
+    GetStartedVue,
     SiginVue,
-    Account,
-    AddToDoVue,
-    ListVue,
+    AccountVue,
+    DashVue,
   },
   data() {
     return {
-      logado: false,
-      haveAccount: true,
-      textTask: [],
-      user: "",
-      userId: ""
+      iconMenu: "fa fa-navicon",
+      showMenu: false,
+      statusLogin: "",
+      typeTask: "fa fa-check-circle",
+      content: "",
+      goLogin: false,
+      account: false
     };
   },
   methods: {
-    hideLogin() {
-      this.logado = true;
+    getLogin(){
+      this.goLogin = true
     },
-    showLogin() {
-      this.logado = false;
+    createAccount(){
+      this.account = true
     },
-    addNewTask($evt) {
-      this.store(this.textTask = $evt, this.userId);
+    backLogin(){
+      this.account = false
     },
-    create() {
-      this.haveAccount = false;
+    openMenu() {
+      if (this.iconMenu === "fa fa-navicon") {
+        this.iconMenu = "fa fa-close";
+        this.showMenu = true;
+      } else {
+        this.iconMenu = "fa fa-navicon";
+        this.showMenu = false;
+      }
     },
-    backLogin($event) {
-      this.haveAccount = true;
-      $event === "logado"
-        ? (this.haveAccount = true)
-        : (this.haveAccount = false);
+    addNewTask() {
+      this.content = "new";
+      this.openMenu();
     },
-    login($event) {
-      this.api($event);
+    showDoneTask(event) {
+      this.content = "";
+      this.typeTask = event;
+      this.openMenu();
     },
-    //Query
-    api(values) {
-      // User
-      api
-        .post("/login", values)
-        .then((response) => response.data.user)
-        .then((data) => {
-
-            this.userId = data[0].id;
-            //Tasks
-            this.tasks(data[0].id);
-
-            this.user = data.name;
-          if ( values.email === data.email && values.password === data.password ) {
-
-            this.logado = false;
-
-          } else {
-            this.logado = true;
-          }
-        })
-        .catch((error) => console.log(error));
+    showPendentTask(event) {
+      this.content = "";
+      this.typeTask = event;
+      this.openMenu();
     },
-    tasks(id) {
-      api.get(`/user/${id}/tasks`)
-      
-        .then((response) => response.data.user.tasks)
-        .then((tasks) => {
-            tasks.map((value) => {
-                setTimeout(() =>{
-                    this.textTask = value.title
-                },100)
-            })
-        })
-        .catch((error) => console.log("Tasks error: " + error));
+    showWarningTask(event) {
+      this.content = "";
+      this.typeTask = event;
+      this.openMenu();
     },
-    store(value, userId){
-        const user_id = userId
-        const data = {
-            title: value,
-            content: "Yet empty",
-        }
-        api.post(`/user/${user_id}/tasks`, data)
-        // .then((response) => console.log(response))
-        .catch((error) => console.log(error))
-
-    }
+    showUsers() {
+      this.content = "users";
+      this.openMenu();
+    },
   },
 };
 </script>
 
 <style>
-body {
-  background-color: #2a2c3c;
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
-  transition: 1s;
-}
-.container {
-  width: 80%;
-  left: 20%;
-  display: flex;
-  align-content: center;
-  justify-content: center;
-  position: relative;
-}
-
-.container from {
-  width: 20%;
-}
-
-.container .list {
-  width: 80%;
-  margin-left: 10%;
-  display: flex;
-  justify-content: flex-end;
-  align-items: flex-start;
-}
 </style>

@@ -1,39 +1,41 @@
 <template>
-  <div class="login">
-    <h2>Login</h2>
-    <p @click="createAccount">I want create a new account</p>
-    <form @submit.prevent="login">
-      <label for="email">Email</label>
-      <input
-        type="email"
-        name="email"
-        id="email"
-        v-model="email"
-        :class="error"
-        placeholder="Type your e-mail"
-        required
-        autocomplete="none"
-      />
+  <div class="main">
+    <div class="login">
+      <h2>Login</h2>
+      <p @click="createAccount">I want create a new account</p>
+      <form @submit.prevent="login">
+        <label for="email">Email</label>
+        <input
+          type="email"
+          name="email"
+          id="email"
+          v-model="email"
+          :class="error"
+          placeholder="Type your e-mail"
+          required
+          autocomplete="none"
+        />
 
-      <label for="password">Password</label>
-      <input
-        type="password"
-        name="password"
-        id="password"
-        :class="error"
-        v-model="password"
-        placeholder="Type your password"
-        required
-        autocomplete="none"
-      />
-      <button type="submit">Login</button>
-    </form>
+        <label for="password">Password</label>
+        <input
+          type="password"
+          name="password"
+          id="password"
+          :class="error"
+          v-model="password"
+          placeholder="Type your password"
+          required
+          autocomplete="none"
+        />
+        <button type="submit">Login</button>
+      </form>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: "Sig-in",
+  name: "SiginVue",
   data() {
     return {
       email: "",
@@ -42,27 +44,30 @@ export default {
     };
   },
   methods: {
+    createAccount() {
+      this.$emit("createAccount");
+    },
     login() {
       const data = {
         email: this.email,
         password: this.password,
       };
-
       this.$emit("login", data);
-    },
-    createAccount() {
-      this.$emit("createAccount");
     },
   },
 };
 </script>
 
 <style scoped>
+.main {
+  width: 100%;
+  height: 90vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 .login {
-  position: fixed;
-  left: 40%;
-  top: 120px;
-  width: 260px;
+  width: 300px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -85,6 +90,7 @@ p {
   cursor: pointer;
   color: white;
   text-decoration: underline;
+  margin: 10px 0;
 }
 .login form {
   width: 100%;
@@ -99,7 +105,7 @@ p {
   color: #eeeeee;
 }
 .login form input {
-  width: 95%;
+  width: 100%;
   font-size: 18px;
   outline: none;
   padding: 10px 6px;
