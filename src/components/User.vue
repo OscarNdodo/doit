@@ -36,7 +36,7 @@ export default {
 
 <style scoped>
 img {
-  width: 100px;
+  width: 180px;
 }
 
 section {
@@ -46,6 +46,7 @@ section {
   align-items: center;
   justify-content: space-evenly;
   padding: 10px 0;
+  margin-bottom: 10px;
 }
 
 section .user {

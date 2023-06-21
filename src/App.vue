@@ -2,13 +2,14 @@
   <main>
     <div class="account" v-show="goLogin">
       <AccountVue @backLogin="backLogin" v-if="account" />
-      <SiginVue @createAccount="createAccount" v-else />
+      <SiginVue @createAccount="createAccount" @login="login" v-else />
     </div>
     <div class="home" v-if="statusLogin === 'logged'">
       <HeaderVue
         @openMenu="openMenu"
         @getLogin="getLogin"
         :iconMenu="iconMenu"
+        :loginIcon="loginIcon"
       />
       <MenuVue
         v-if="showMenu"
@@ -20,7 +21,10 @@
       />
       <DashVue :typeTask="typeTask" :content="content" />
     </div>
-    <GetStartedVue @getLogin="getLogin" v-show="!goLogin" v-else />
+    <div v-else-if="statusLogin === 'loginng'">
+      <HeaderVue @getLogin="getLogin" v-show="!goLogin" />
+      <GetStartedVue @getLogin="getLogin" v-show="!goLogin" />
+    </div>
   </main>
 </template>
 
@@ -45,23 +49,38 @@ export default {
   data() {
     return {
       iconMenu: "fa fa-navicon",
+      loginIcon: "fa fa-sign-in",
       showMenu: false,
-      statusLogin: "",
+      statusLogin: "loginng",
       typeTask: "fa fa-check-circle",
       content: "",
       goLogin: false,
-      account: false
+      account: false,
     };
   },
   methods: {
-    getLogin(){
-      this.goLogin = true
+    login(event) {
+      const data = event;
+
+      if (data.email === "ana@gmail.com" && data.password === "1234") {
+        this.statusLogin = "logged";
+        this.goLogin = false;
+        this.loginIcon = "fa fa-sign-out";
+      }
     },
-    createAccount(){
-      this.account = true
+    getLogin() {
+      if (this.statusLogin === "logged") {
+        this.goLogin = false;
+        this.statusLogin = "loginng"
+      } else {
+        this.goLogin = true;
+      }
     },
-    backLogin(){
-      this.account = false
+    createAccount() {
+      this.account = true;
+    },
+    backLogin() {
+      this.account = false;
     },
     openMenu() {
       if (this.iconMenu === "fa fa-navicon") {

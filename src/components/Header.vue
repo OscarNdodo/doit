@@ -5,7 +5,7 @@
       <h1>doit</h1>
     </div>
     <div class="account">
-      <i class="fa fa-sign-in"></i>
+      <i :class="loginIcon"></i>
       <button @click="getLogin" class="fa fa-user"></button>
     </div>
   </header>
@@ -16,6 +16,10 @@ export default {
   name: "HeaderVue",
   props: {
     iconMenu: String,
+    loginIcon: {
+      type: String,
+      default: "fa fa-sign-in"
+    }
   },
   methods: {
     openMenu() {
@@ -67,6 +71,7 @@ header .account {
   justify-content: space-between;
   background-color: var(--green);
   color: var(--white);
+  border-radius: 4px;
 }
 
 header .account button {
@@ -76,6 +81,7 @@ header .account button {
   background-color: var(--white);
   color: var(--black);
   font-weight: bold;
+  border-radius: 4px;
 }
 
 header .account .fa {
